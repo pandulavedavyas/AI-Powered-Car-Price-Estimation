@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Result</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        body { 
+            background: #000;
+            overflow: hidden;
+            display: flex;
+            align-items: center; justify-content: center; height: 100vh;
+        }
+        .result-container {
+            text-align: center;
+        }
+        .price-display {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 5rem;
+            color: #ff003c;
+            text-shadow: 0 0 20px rgba(255, 0, 60, 0.8), 0 0 40px rgba(255, 0, 60, 0.4);
+            margin: 20px 0;
+        }
+        .car-display-name {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 2rem;
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="smokeCanvas" style="position: absolute; top:0; left:0; width:100%; height:100%; z-index:1; pointer-events:none;"></canvas>
+
+    <div class="glass-panel result-container slide-in-up" style="position: relative; z-index: 10; width: 600px; max-width: 90%;">
+        <div class="header-icon" style="font-size: 3rem; margin-bottom: 20px;">
+            <i class="fas fa-check-circle neon-text-blue"></i>
+        </div>
+        
+        {% if error %}
+            <h2 style="color:red;">Error</h2>
+            <p>{{ error }}</p>
+            <a href="/predict" class="btn-neon-red mt-4">Try Again</a>
+        {% else %}
+            <h2 class="neon-text-blue" style="font-size: 1.5rem; text-transform: uppercase; letter-spacing: 2px;">Estimated Car Price</h2>
+            
+            <div class="car-display-name">{{ car_name }}</div>
+            
+            <div class="price-display">₹<span id="price-counter" data-target="{{ predicted_price }}">0</span></div>
+            
+            <p style="color:#aaa; font-family: 'Rajdhani', sans-serif; font-size: 1.2rem;">Model confidence: 94%</p>
+            
+            <a href="/" class="btn-glass mt-4"><i class="fas fa-home"></i> Return Home</a>
+            <a href="/predict" class="btn-neon-red mt-4"><i class="fas fa-redo"></i> New Prediction</a>
+        {% endif %}
+    </div>
+
+    <!-- Script to animate the counter -->
+    <script>
+        {% if not error %}
+        document.addEventListener('DOMContentLoaded', () => {
+            const counter = document.getElementById('price-counter');
+            const target = +counter.getAttribute('data-target');
+            const duration = 2000; // ms
+            const stepTime = 20; // ms
+            const steps = duration / stepTime;
+            let currentStep = 0;
+            
+            // Format number to local string
+            const formatNumber = (num) => {
+                return num.toLocaleString('en-IN', { maximumFractionDigits: 2 });
+            };
+
+            const timer = setInterval(() => {
+                currentStep++;
+                const progress = currentStep / steps;
+                
+                // Use easeOut quad
+                const easeOut = progress * (2 - progress);
+                
+                const currentVal = target * easeOut;
+                
+                counter.innerText = formatNumber(currentVal);
+                
+                if (currentStep >= steps) {
+                    clearInterval(timer);
+                    counter.innerText = formatNumber(target);
+                    // Add pop effect using CSS transition
+                    counter.style.transform = 'scale(1.1)';
+                    setTimeout(() => counter.style.transform = 'scale(1)', 200);
+                }
+            }, stepTime);
+        });
+        {% endif %}
+        
+        // Background slow moving lines/stars for cinematic effect
+        const canvas = document.getElementById("smokeCanvas");
+        const ctx = canvas.getContext("2d");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        let lines = [];
+        for(let i=0; i<30; i++) {
+            lines.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                len: Math.random() * 80 + 20,
+                speed: Math.random() * 5 + 2,
+                alpha: Math.random() * 0.3 + 0.1
+            });
+        }
+        function drawLines() {
+            ctx.fillStyle = "rgba(0,0,0,0.1)";
+            ctx.fillRect(0,0, canvas.width, canvas.height);
+            lines.forEach(l => {
+                l.y += l.speed;
+                if(l.y > canvas.height) {
+                    l.y = -l.len;
+                    l.x = Math.random() * canvas.width;
+                }
+                ctx.beginPath();
+                ctx.moveTo(l.x, l.y);
+                ctx.lineTo(l.x, l.y + l.len);
+                ctx.strokeStyle = `rgba(0, 150, 255, ${l.alpha})`; // Blue lines
+                ctx.lineWidth = 2;
+                ctx.stroke();
+            });
+            requestAnimationFrame(drawLines);
+        }
+        drawLines();
+    </script>
+</body>
+</html>

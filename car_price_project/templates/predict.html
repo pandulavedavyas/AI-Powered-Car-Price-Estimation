@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predict Car Price</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        body { 
+            background: #000;
+            overflow: hidden; /* For particles */
+            display: flex;
+            align-items: center; justify-content: center; height: 100vh;
+        }
+        /* Override specifically to center the form */
+        #predict-container {
+            position: relative;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="smokeCanvas" style="position: absolute; top:0; left:0; width:100%; height:100%; z-index:1; pointer-events:none;"></canvas>
+
+    <div class="glass-panel slide-in-up" id="predict-container" style="width: 500px; max-width: 90%;">
+        <a href="/" class="back-link"><i class="fas fa-arrow-left"></i> Home</a>
+        
+        <h2><i class="fas fa-car neon-text-red"></i> Predict Car Price</h2>
+        
+        <form action="/predict" method="POST" class="predict-form">
+            <div class="input-group">
+                <label>Car Brand</label>
+                <input type="text" name="brand" placeholder="e.g. BMW" required class="neon-input">
+            </div>
+            
+            <div class="input-group">
+                <label>Model Name</label>
+                <input type="text" name="model" placeholder="e.g. X5 xDrive" required class="neon-input">
+            </div>
+
+            <div class="input-group">
+                <label>Purchase Year</label>
+                <input type="number" name="year" placeholder="e.g. 2019" min="1990" max="2026" required class="neon-input">
+            </div>
+
+            <div class="input-group">
+                <label>Kilometers Driven</label>
+                <input type="number" name="kms" placeholder="e.g. 30000" required class="neon-input">
+            </div>
+
+            <div class="row-inputs">
+                <div class="input-group half">
+                    <label>Fuel Type</label>
+                    <select name="fuel" required class="neon-input">
+                        <option value="Petrol">Petrol</option>
+                        <option value="Diesel">Diesel</option>
+                        <option value="CNG">CNG</option>
+                        <option value="LPG">LPG</option>
+                        <option value="Electric">Electric</option>
+                    </select>
+                </div>
+                
+                <div class="input-group half">
+                    <label>Transmission</label>
+                    <select name="transmission" required class="neon-input">
+                        <option value="Manual">Manual</option>
+                        <option value="Automatic">Automatic</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label>Owner Type</label>
+                <select name="owner_type" required class="neon-input">
+                    <option value="First Owner">First Owner</option>
+                    <option value="Second Owner">Second Owner</option>
+                    <option value="Third Owner">Third Owner</option>
+                    <option value="Fourth & Above Owner">Fourth & Above Owner</option>
+                    <option value="Test Drive Car">Test Drive Car</option>
+                </select>
+            </div>
+
+            <button type="submit" class="submit-btn btn-neon-red w-100">Calculate Value <i class="fas fa-microchip"></i></button>
+        </form>
+    </div>
+
+    <!-- Small script to draw smoke particles for predict page background -->
+    <script>
+        const canvas = document.getElementById("smokeCanvas");
+        const ctx = canvas.getContext("2d");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        let particles = [];
+        for(let i=0; i<50; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                vx: (Math.random() - 0.5) * 1,
+                vy: (Math.random() - 0.5) * 1,
+                size: Math.random() * 3 + 1,
+                alpha: Math.random() * 0.5 + 0.1
+            });
+        }
+        function draw() {
+            ctx.clearRect(0,0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.x += p.vx; p.y += p.vy;
+                if(p.x < 0 || p.x > canvas.width) p.vx *= -1;
+                if(p.y < 0 || p.y > canvas.height) p.vy *= -1;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI*2);
+                ctx.fillStyle = `rgba(180, 20, 20, ${p.alpha})`; // Redish neon particles
+                ctx.fill();
+            });
+            requestAnimationFrame(draw);
+        }
+        draw();
+    </script>
+</body>
+</html>

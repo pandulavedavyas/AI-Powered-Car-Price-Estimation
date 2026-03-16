@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="login-page fade-in-up">
+    <!-- Blurred Background Cars -->
+    <div class="garage-background">
+        <div class="car-left bg-blur"></div>
+        <div class="car-right bg-blur"></div>
+    </div>
+
+    <div class="login-container glassmorphism">
+        <h2>Welcome Back</h2>
+        <p>Login to predict and explore</p>
+
+        <div class="login-tabs">
+            <button class="tab-btn active" onclick="showTab('google-tab')">Google</button>
+            <button class="tab-btn" onclick="showTab('phone-tab')">Phone</button>
+        </div>
+
+        <!-- Google Form Mockup -->
+        <form method="POST" id="google-tab" class="login-form active">
+            <input type="hidden" name="method" value="Google">
+            <div class="input-group">
+                <label>Full Name</label>
+                <input type="text" name="name" required placeholder="John Doe">
+            </div>
+            <div class="input-group">
+                <label>Email Address</label>
+                <input type="email" name="email" required placeholder="john@example.com">
+            </div>
+            <div class="input-group">
+                <label>Phone Number (Optional)</label>
+                <input type="text" name="phone" placeholder="7672056985">
+            </div>
+            <div class="input-group">
+                <label>Location</label>
+                <input type="text" name="location" required placeholder="New York, USA">
+            </div>
+            <button type="submit" class="btn btn-primary btn-full">Login with Google</button>
+        </form>
+
+        <!-- Phone Form Mockup -->
+        <form method="POST" id="phone-tab" class="login-form">
+            <input type="hidden" name="method" value="Phone">
+            <div class="input-group">
+                <label>Full Name</label>
+                <input type="text" name="name" required placeholder="Jane Doe">
+            </div>
+            <div class="input-group">
+                <label>Phone Number</label>
+                <input type="text" name="phone" required placeholder="7672056985">
+            </div>
+            <div class="input-group">
+                <label>Location</label>
+                <input type="text" name="location" required placeholder="Los Angeles, USA">
+            </div>
+            <div class="input-group otp-group">
+                <label>Enter OTP</label>
+                <div style="display: flex; gap:10px;">
+                    <input type="text" required placeholder="1234">
+                    <button type="button" class="btn btn-secondary">Send OTP</button>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary btn-full mt-3">Verify & Login</button>
+        </form>
+    </div>
+</div>
+
+<script>
+function showTab(tabId) {
+    document.querySelectorAll('.login-form').forEach(form => form.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    document.getElementById(tabId).classList.add('active');
+    event.target.classList.add('active');
+}
+</script>
+{% endblock %}

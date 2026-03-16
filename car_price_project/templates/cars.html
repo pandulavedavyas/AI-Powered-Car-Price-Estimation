@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="cars-page fade-in-up">
+    <!-- Blurred Background Cars -->
+    <div class="garage-background">
+        <div class="car-left bg-blur"></div>
+        <div class="car-right bg-blur"></div>
+    </div>
+
+    <div class="explore-container">
+        <!-- Sidebar Filters -->
+        <aside class="filters glassmorphism">
+            <h3>Filter Cars</h3>
+            <form action="/cars" method="GET">
+                <div class="filter-group">
+                    <label>Search Bar</label>
+                    <input type="text" name="search" placeholder="Search Brand/Model...">
+                </div>
+                <div class="filter-group">
+                    <label>Engine Type</label>
+                    <select name="engine">
+                        <option value="">All</option>
+                        <option value="Petrol">Petrol</option>
+                        <option value="Diesel">Diesel</option>
+                        <option value="Hybrid">Hybrid</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Transmission</label>
+                    <select name="transmission">
+                        <option value="">All</option>
+                        <option value="Manual">Manual</option>
+                        <option value="Automatic">Automatic</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Sort By</label>
+                    <select name="sort">
+                        <option value="">Default</option>
+                        <option value="price_asc">Price: Low to High</option>
+                        <option value="price_desc">Price: High to Low</option>
+                        <option value="mileage">Mileage</option>
+                        <option value="newest">Newest Models</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full">Apply Filters</button>
+            </form>
+        </aside>
+
+        <!-- Car Map Grid -->
+        <div class="cars-grid">
+            {% for car in cars %}
+            <div class="car-card glassmorphism card-hover transition-transform" onclick="window.location.href='/car/{{ car.id }}'">
+                <div class="car-img-wrapper">
+                    <img src="{{ car.image_url }}" alt="{{ car.name }}" class="car-img">
+                </div>
+                <div class="car-info">
+                    <h3 class="car-name">{{ car.name }} <span class="car-year">({{ car.year }})</span></h3>
+                    <p class="car-brand text-muted">{{ car.brand }}</p>
+                    <div class="car-specs flex-gap">
+                        <span class="badge">{{ car.engine_type }}</span>
+                        <span class="badge">{{ car.transmission }}</span>
+                    </div>
+                    <h4 class="car-price gradient-text">₹{{ "{:,.2f}".format(car.price) }}</h4>
+                </div>
+            </div>
+            {% endfor %}
+            {% if not cars %}
+            <div class="no-results">
+                <h3>No cars found.</h3>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

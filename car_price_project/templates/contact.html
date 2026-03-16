@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="contact-page fade-in-up">
+    <!-- Blurred Background Cars -->
+    <div class="garage-background">
+        <div class="car-left bg-blur"></div>
+        <div class="car-right bg-blur"></div>
+    </div>
+
+    <div class="contact-container glassmorphism">
+        <div class="contact-info">
+            <h2 class="gradient-text">Get In Touch</h2>
+            <p>We are available 24/7 for support and inquiries.</p>
+            
+            <div class="info-item mt-3">
+                <span class="icon">📞</span>
+                <div>
+                    <h4>Phone Number</h4>
+                    <p>7672056985</p>
+                </div>
+            </div>
+            
+            <div class="info-item">
+                <span class="icon">📧</span>
+                <div>
+                    <h4>Email Address</h4>
+                    <p>support@carpredictai.com</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="contact-form-container">
+            {% if success %}
+            <div class="alert alert-success">
+                <p>Thank you! Your message has been sent successfully.</p>
+            </div>
+            {% endif %}
+            
+            <form method="POST" class="contact-form">
+                <div class="input-group">
+                    <label>Your Email Address</label>
+                    <input type="email" name="email" required placeholder="john@example.com">
+                </div>
+                <div class="input-group">
+                    <label>How can we help you?</label>
+                    <textarea name="message" rows="5" required placeholder="Write your message here..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full mt-3">Send Message</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,170 @@
+/* Specific CSS for the F1 Homepage */
+
+.f1-scene {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #f8f9fa; /* Bright white track base */
+    overflow: hidden;
+    z-index: 10;
+}
+
+/* Racing Track Background detailing */
+.track-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        repeating-linear-gradient(90deg, transparent 0 500px, rgba(0,0,0,0.02) 500px 505px),
+        repeating-linear-gradient(0deg, transparent 0 100px, rgba(0,0,0,0.03) 100px 105px);
+    z-index: 1;
+}
+
+.track-bg::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 300px;
+    transform: translateY(-50%);
+    background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.02) 20%, rgba(0,0,0,0.02) 80%, transparent 100%);
+    z-index: 1;
+}
+
+/* Canvas for Particles (Smoke) and Skidmarks */
+#fxCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    pointer-events: none;
+}
+
+/* F1 Car Container */
+.f1-car-container {
+    position: absolute;
+    top: 50%;
+    left: -400px; /* Start way off-screen left */
+    width: 300px;
+    height: 150px;
+    transform-origin: center center;
+    z-index: 3;
+    pointer-events: none; /* Let clicks pass through */
+    /* Motion blur effect dynamically handled via GSAP, but baseline is none */
+    filter: drop-shadow(0 20px 30px rgba(0,0,0,0.4));
+}
+
+.f1-car-svg {
+    width: 100%;
+    height: 100%;
+}
+
+/* Exhaust Fire Glow Animation */
+@keyframes exhaustFlicker {
+    0% { transform: scale(1); opacity: 0.8; fill: #ff5500; }
+    50% { transform: scale(1.3); opacity: 1; fill: #ffaa00; }
+    100% { transform: scale(1); opacity: 0.8; fill: #ff5500; }
+}
+.exhaust-glow {
+    animation: exhaustFlicker 0.1s infinite;
+    transform-origin: 45px 100px;
+}
+
+/* Glowing Brake Lights */
+.brake-light.active {
+    opacity: 1;
+    fill: #ff0000;
+    filter: drop-shadow(0 0 10px #ff0000);
+    transition: opacity 0.1s ease;
+}
+
+/* Overlay UI */
+.hero-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 5;
+    text-align: center;
+    opacity: 0; /* Hidden initially */
+    pointer-events: none; /* Make clickable once visible */
+    width: 100%;
+}
+
+.f1-title {
+    font-size: 5rem;
+    font-weight: 800;
+    color: #111 !important; /* Dark text for bright track */
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+    text-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.f1-subtitle {
+    font-size: 1.5rem;
+    color: #444;
+    margin-bottom: 40px;
+    font-weight: 600;
+}
+
+.f1-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.f1-btn {
+    padding: 15px 40px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+.btn-enter {
+    background: #e10600; /* F1 Red */
+    color: #fff;
+    border: 2px solid #e10600;
+}
+.btn-enter:hover {
+    background: #fff;
+    color: #e10600;
+}
+
+.btn-predict {
+    background: #111;
+    color: #fff;
+    border: 2px solid #111;
+}
+.btn-predict:hover {
+    background: #fff;
+    color: #111;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .f1-title {
+        font-size: 2.5rem;
+    }
+    .f1-car-container {
+        width: 200px;
+        height: 100px;
+    }
+    .f1-buttons {
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+}
